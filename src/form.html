@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Form</title>
+    <script>
+        function submitForm() {
+            // Get the input value
+            var inputValue = document.getElementById("textInput").value;
+
+            // Create the request data
+            var requestData = {
+                input: inputValue
+            };
+
+            // Send the AJAX request
+            fetch("http://localhost:8000/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response
+                } else {
+                    throw `Looks like something went wrong. Status: ${response.status}`;
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the result JSON in the div
+                document.getElementById("resultDiv").textContent = JSON.stringify(data, null, 4);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
+    </script>
+</head>
+<body style="white-space: pre;">
+    <form>
+        <label for="textInput">Enter your tracking number:</label>
+        <input type="text" id="textInput" name="textInput">
+
+        <button type="button" onclick="submitForm()">Track shipment</button>
+    </form>
+
+    <hr/>
+    <div id="resultDiv"></div>
+</body>
+</html>

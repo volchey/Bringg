@@ -16,8 +16,8 @@ class RequestException(Exception):
 
 
 class FedEx:
-    client_id = ''
-    client_secret = ''
+    client_id = 'l7ecac81c1e42b46ec9eab51a7d8134e09'
+    client_secret = 'baf2dbabe32a4a9aa8fb3eac42555329'
     url = 'https://apis-sandbox.fedex.com/'
     loger = logging.getLogger('Fedex')
 
@@ -69,16 +69,22 @@ class FedEx:
     def _build_zenkraft_result(self, response):
         resp_dict = response.json()
         complete_track_results = resp_dict['output']['completeTrackResults']
+        # TODO: make complex validation
         if not complete_track_results:
-            self.loger.warning(f'results are empty')
-            return {}
+            self.loger.warning('results are empty')
+            return {'error': 'results are empty'}
         track_results = complete_track_results[0]['trackResults']
         if not track_results:
             self.loger.warning(f'track results are empty')
-            return {}
+            return {'error': 'track results are empty'}
 
         # TODO: check if it is possible to have couple of track results and what does it mean.
         track = track_results[0]
+
+        error = track.get('error')
+        if error:
+            self.loger.warning(f'track error: {error["message"]}')
+            return {'error': error["message"]}
 
         # print(resp_dict)
         result = {

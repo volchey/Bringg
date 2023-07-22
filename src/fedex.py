@@ -16,8 +16,8 @@ class RequestException(Exception):
 
 
 class FedEx:
-    client_id = 'l7ecac81c1e42b46ec9eab51a7d8134e09'
-    client_secret = 'baf2dbabe32a4a9aa8fb3eac42555329'
+    client_id = ''
+    client_secret = ''
     url = 'https://apis-sandbox.fedex.com/'
     loger = logging.getLogger('Fedex')
 
